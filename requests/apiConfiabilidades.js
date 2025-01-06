@@ -15,12 +15,14 @@ module.exports = {
         };
 
         const options = buildOptions({ req, headers, ip });
+        let response;
         try {
-            const response = await apiConfiabilidades.get(`/${cpf}/niveis?response-type=ids`, options);
+            response = await apiConfiabilidades.get(`/${cpf}/niveis?response-type=ids`, options);
         } catch (error) {
+            console.error("Erro na consulta de selos no API Confiabilidades: " + error);
             throw new Error(msg.GC60);
         }
-        const response = await apiConfiabilidades.get(`/${cpf}/niveis?response-type=ids`, options);
+        
         const niveis = response.data;
 
         if (!Array.isArray(niveis) || niveis.length === 0) {
