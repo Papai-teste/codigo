@@ -1,0 +1,1211 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "GaaP",
+    "description": "Gestor de consentimento de APIs de governo",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://d-api-gaap-gestor.estaleiro.serpro.gov.br/api/"
+    }
+  ],
+  "paths": {
+    "/v1/credenciamento": {
+      "post": {
+        "tags": [
+          "SENATRAN Condutor"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "x-jwt-assertion",
+            "in": "header",
+            "description": "Token do WSO2",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Credenciamento solicitado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "idTemplate": {
+                      "type": "string",
+                      "example": "a333f024-08f6-55ec-a2a2-0faca2b5defg"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "idTemplate": {
+                      "type": "string",
+                      "example": "a333f024-08f6-55ec-a2a2-0faca2b5defg"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "examples": {
+                  "gc34": {
+                    "$ref": "#/components/schemas/examples_404_gc34"
+                  },
+                  "gc43": {
+                    "$ref": "#/components/schemas/examples_404_gc43"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "examples": {
+                  "gc32": {
+                    "$ref": "#/components/schemas/examples_422_gc32"
+                  },
+                  "gc33": {
+                    "$ref": "#/components/schemas/examples_422_gc33"
+                  },
+                  "gc36": {
+                    "$ref": "#/components/schemas/examples_422_gc36"
+                  },
+                  "gc38": {
+                    "$ref": "#/components/schemas/examples_422_gc38"
+                  },
+                  "gc40": {
+                    "$ref": "#/components/schemas/examples_422_gc40"
+                  },
+                  "gc44": {
+                    "$ref": "#/components/schemas/examples_422_gc44"
+                  },
+                  "gc47": {
+                    "$ref": "#/components/schemas/examples_422_gc47"
+                  },
+                  "gc48": {
+                    "$ref": "#/components/schemas/examples_422_gc48"
+                  },
+                  "gc49": {
+                    "$ref": "#/components/schemas/examples_422_gc49"
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "examples": {
+                  "gc41": {
+                    "$ref": "#/components/schemas/examples_500_gc41"
+                  },
+                  "gc42": {
+                    "$ref": "#/components/schemas/examples_500_gc42"
+                  }
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Erro em alguma das APIs consumidas pelo GaaP",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "examples": {
+                  "gc35": {
+                    "$ref": "#/components/schemas/examples_502_gc35"
+                  },
+                  "gc37": {
+                    "$ref": "#/components/schemas/examples_502_gc37"
+                  },
+                  "gc39": {
+                    "$ref": "#/components/schemas/examples_502_gc39"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Informações do credenciamento a ser solicitado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/bodyCredenciamento"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/senatran/infracoes/cpf/{cpf}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "cpf",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "CPF a ser consultado no SENATRAN"
+          },
+          {
+            "name": "length",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-jwt-assertion",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id-consentimento",
+            "in": "header",
+            "description": "Identificador do consentimento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consulta realizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "dados": {
+                      "type": "object",
+                      "properties": {
+                        "infracoes": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "identificador": {
+                                "type": "string",
+                                "example": "descricaoIndicadorExigibilidade"
+                              },
+                              "chave": {
+                                "type": "string",
+                                "example": "Descriçãoindicadordeexigibilidade"
+                              },
+                              "descricao": {
+                                "type": "string",
+                                "example": "Descriçãoindicadordeexigibilidade"
+                              },
+                              "valor": {
+                                "type": "string",
+                                "example": "kwIWmT7VNzLE3HCD+HTLD4rwWwb5+B6J+tGi7iUD1pY7XrMiJYwZMyGE9+pU/VNDqnCTg4fAtNDbWyj5Lg4V7HRy0YVdEAAnyYegX841RmeCOIfZxjDA9+yAh8dDtj"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "dados": {
+                      "type": "object",
+                      "properties": {
+                        "infracoes": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "identificador": {
+                                "type": "string",
+                                "example": "descricaoIndicadorExigibilidade"
+                              },
+                              "chave": {
+                                "type": "string",
+                                "example": "Descriçãoindicadordeexigibilidade"
+                              },
+                              "descricao": {
+                                "type": "string",
+                                "example": "Descriçãoindicadordeexigibilidade"
+                              },
+                              "valor": {
+                                "type": "string",
+                                "example": "kwIWmT7VNzLE3HCD+HTLD4rwWwb5+B6J+tGi7iUD1pY7XrMiJYwZMyGE9+pU/VNDqnCTg4fAtNDbWyj5Lg4V7HRy0YVdEAAnyYegX841RmeCOIfZxjDA9+yAh8dDtj"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Registro não encontrado na base"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "description": "Erro em alguma das APIs consumidas pelo GaaP"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/consentimento/solicitar/{cpf}": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "cpf",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "CPF do cidadão que será solicitado o consentimento"
+          },
+          {
+            "name": "x-jwt-assertion",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consentimento solicitado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "idConsentimento": {
+                      "type": "string",
+                      "example": "62be0d8a7c1e0f19b33639e5"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "idConsentimento": {
+                      "type": "string",
+                      "example": "62be0d8a7c1e0f19b33639e5"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Registro não encontrado na base"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "description": "Erro em alguma das APIs consumidas pelo GaaP"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Informações da solicitação do consentimento",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/bodyConsentimento"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/consentimento/consultar/{idConsentimento}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "idConsentimento",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do consentimento a ser consultado"
+          },
+          {
+            "name": "x-jwt-assertion",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consulta realizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "62be0d8a7c1e0f19b33639e5"
+                    },
+                    "idTemplateConsentimento": {
+                      "type": "string",
+                      "example": "e2e070f9-05d1-4d06-b51a-883f4056156a"
+                    },
+                    "CNPJ": {
+                      "type": "string",
+                      "example": "33683111000107"
+                    },
+                    "razaoSocial": {
+                      "type": "string",
+                      "example": "SERPRO"
+                    },
+                    "CPF": {
+                      "type": "string",
+                      "example": "61079888071"
+                    },
+                    "urlRetorno": {
+                      "type": "string",
+                      "example": "http://localhost:8080"
+                    },
+                    "dataHoraSolicitacao": {
+                      "type": "string",
+                      "example": "2022-07-11T18:01:58.774-03:00"
+                    },
+                    "dataExpiracao": {
+                      "type": "string",
+                      "example": "2022-12-31T00:00:00-03:00"
+                    },
+                    "finalidade": {
+                      "type": "string",
+                      "example": "Boleto Bancário"
+                    },
+                    "consequenciaRevogacao": {
+                      "type": "string",
+                      "example": "Bloqueio do da conta bancária"
+                    },
+                    "metadados": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "descricao": {
+                            "type": "string",
+                            "example": "Nome do condutor"
+                          },
+                          "identificador": {
+                            "type": "string",
+                            "example": "nomeContribuinte"
+                          },
+                          "rotulo": {
+                            "type": "string",
+                            "example": "Nome do condutor"
+                          },
+                          "sensivel": {
+                            "type": "boolean",
+                            "example": false
+                          }
+                        }
+                      }
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "ATIVO"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "62be0d8a7c1e0f19b33639e5"
+                    },
+                    "idTemplateConsentimento": {
+                      "type": "string",
+                      "example": "e2e070f9-05d1-4d06-b51a-883f4056156a"
+                    },
+                    "CNPJ": {
+                      "type": "string",
+                      "example": "33683111000107"
+                    },
+                    "razaoSocial": {
+                      "type": "string",
+                      "example": "SERPRO"
+                    },
+                    "CPF": {
+                      "type": "string",
+                      "example": "61079888071"
+                    },
+                    "urlRetorno": {
+                      "type": "string",
+                      "example": "http://localhost:8080"
+                    },
+                    "dataHoraSolicitacao": {
+                      "type": "string",
+                      "example": "2022-07-11T18:01:58.774-03:00"
+                    },
+                    "dataExpiracao": {
+                      "type": "string",
+                      "example": "2022-12-31T00:00:00-03:00"
+                    },
+                    "finalidade": {
+                      "type": "string",
+                      "example": "Boleto Bancário"
+                    },
+                    "consequenciaRevogacao": {
+                      "type": "string",
+                      "example": "Bloqueio do da conta bancária"
+                    },
+                    "metadados": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "descricao": {
+                            "type": "string",
+                            "example": "Nome do condutor"
+                          },
+                          "identificador": {
+                            "type": "string",
+                            "example": "nomeContribuinte"
+                          },
+                          "rotulo": {
+                            "type": "string",
+                            "example": "Nome do condutor"
+                          },
+                          "sensivel": {
+                            "type": "boolean",
+                            "example": false
+                          }
+                        }
+                      }
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "ATIVO"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Registro não encontrado na base"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "description": "Erro em alguma das APIs consumidas pelo GaaP"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "response_401": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "string",
+            "example": "GC31"
+          },
+          "message": {
+            "type": "string",
+            "example": "GC31 - Erro na autenticação do token."
+          }
+        },
+        "xml": {
+          "name": "response_401"
+        }
+      },
+      "examples_404_gc34": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC34"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC34 - Erro ao obter API no BD."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC34"
+          }
+        },
+        "xml": {
+          "name": "examples_404_gc34"
+        }
+      },
+      "examples_404_gc43": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC43"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC43 - Certificado inválido. Favor contactar a area do cliente para realizar ou ajustar acolhimento."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC43"
+          }
+        },
+        "xml": {
+          "name": "examples_404_gc43"
+        }
+      },
+      "examples_422_gc32": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC32"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC32 - Faltando um parâmetro no body da requisição."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC32"
+          }
+        },
+        "xml": {
+          "name": "examples_422_gc32"
+        }
+      },
+      "examples_422_gc33": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC33"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC33 - Algum parâmetro no body da requisição não é string."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC33"
+          }
+        },
+        "xml": {
+          "name": "examples_422_gc33"
+        }
+      },
+      "examples_422_gc36": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC36"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC36 - Erro ao obter nome do cliente no certificado."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC36"
+          }
+        },
+        "xml": {
+          "name": "examples_422_gc36"
+        }
+      },
+      "examples_422_gc38": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC38"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC38 - Erro ao atualizar os dados do cliente no BD."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC38"
+          }
+        },
+        "xml": {
+          "name": "examples_422_gc38"
+        }
+      },
+      "examples_422_gc40": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC40"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC40 - Erro ao salvar o credenciamento no BD."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC40"
+          }
+        },
+        "xml": {
+          "name": "examples_422_gc40"
+        }
+      },
+      "examples_422_gc44": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC44"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC44 - Certificado expirado. Favor contactar a area do cliente para realizar ou ajustar acolhimento."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC44"
+          }
+        },
+        "xml": {
+          "name": "examples_422_gc44"
+        }
+      },
+      "examples_422_gc46": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC46"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC46 - O parâmetro maneirasObtencaoInformacao deve conter um desses 3 valores, em capslock: PRESENCIALMENTE, REQUISICAO_ELETRONICA e OUTRO."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC46"
+          }
+        },
+        "xml": {
+          "name": "examples_422_gc46"
+        }
+      },
+      "examples_422_gc47": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC47"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC47 - O parâmetro detalheOutraManeiraObtencaoInf deve ser preenchido quando maneirasObtencaoInformacao tem o valor OUTRO."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC47"
+          }
+        },
+        "xml": {
+          "name": "examples_422_gc47"
+        }
+      },
+      "examples_422_gc48": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC48"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC48 - O parâmetro eventosTratamento ou maneirasObtencaoInformacao não é array."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC48"
+          }
+        },
+        "xml": {
+          "name": "examples_422_gc48"
+        }
+      },
+      "examples_422_gc49": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC49"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC49 - Domínio não permitido no PDC."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC49"
+          }
+        },
+        "xml": {
+          "name": "examples_422_gc49"
+        }
+      },
+      "examples_502_gc35": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC35"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC35 - Erro ao obter chave publica do PAV."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC35"
+          }
+        },
+        "xml": {
+          "name": "examples_502_gc35"
+        }
+      },
+      "examples_502_gc37": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC37"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC37 - Erro ao obter controlador no PDC."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC37"
+          }
+        },
+        "xml": {
+          "name": "examples_502_gc37"
+        }
+      },
+      "examples_502_gc39": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC39"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC39 - Erro ao salvar template no PDC."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC39"
+          }
+        },
+        "xml": {
+          "name": "examples_502_gc39"
+        }
+      },
+      "examples_500_gc41": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC41"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC41 - Erro ao obter o cliente no BD."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC41"
+          }
+        },
+        "xml": {
+          "name": "examples_500_gc41"
+        }
+      },
+      "examples_500_gc42": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "example": "GC42"
+              },
+              "message": {
+                "type": "string",
+                "example": "GC42 - Erro ao obter o template no BD."
+              }
+            }
+          },
+          "summary": {
+            "type": "string",
+            "example": "GC42"
+          }
+        },
+        "xml": {
+          "name": "examples_500_gc42"
+        }
+      },
+      "bodyCredenciamento": {
+        "type": "object",
+        "properties": {
+          "descricaoFinalidade": {
+            "type": "string",
+            "example": "descrição detalhada da finalidade",
+            "description": "Campo Obrigatório e no máximo até 512 caracteres. Texto livre contendo a descrição detalhada da finalidade do uso dos dados do cidadão."
+          },
+          "rotuloFinalidade": {
+            "type": "string",
+            "example": "resumo da finalidade do uso dos dados do credenciamento a ser gerado",
+            "description": "Campo Obrigatório e no máximo até 512 caracteres. Texto livre contendo um resumo da finalidade do uso dos dados do cidadão. Se esta informação não for a mesma de um credenciamento cadastrado anteriormente, um novo será criado."
+          },
+          "consequenciaRevogacao": {
+            "type": "string",
+            "example": "consequências caso o cidadão revogue o consentimento.",
+            "description": "Campo Obrigatório e no máximo de 4000 caracteres. Texto livre contendo as consequências caso o cidadão revogue o consentimento."
+          },
+          "infoCompartilhamentoDeDados": {
+            "type": "string",
+            "example": "se os dados serão ou não compartilhados com terceiros",
+            "description": "Campo Obrigatório e no máximo de 4000 caracteres. Texto livre contendo a informação sobre o compartilhamento ou não dos dados do cidação com terceiros."
+          },
+          "telefoneCliente": {
+            "type": "string",
+            "example": "telefone do cliente para contato",
+            "description": "Campo Obrigatório e no máximo 11 caracteres e sem máscara. Somente dígitos numéricos que representam o telefone de contato do cliente."
+          },
+          "emailCliente": {
+            "type": "string",
+            "example": "e-mail do cliente  para contato",
+            "description": "Campo Obrigatório e no máximo 255 caracteres. Deverá conter um email válido para contato com o cliente."
+          },
+          "dominio": {
+            "type": "string",
+            "example": "transito",
+            "description": "Campo Obrigatório e no máximo até 255 caracteres. Deve ser escrito da seguinte forma :transito."
+          },
+          "encarregadoCliente": {
+            "type": "object",
+            "example": {
+              "nome": "nome do encarregado pela empresa",
+              "email": "e-mail do encarregado pela empresa",
+              "telefone": "telefone do encarregado pela empresa",
+              "cpfCnpj": "CNPJ OU CPF do encarregado pela empresa"
+            },
+            "description": "Campo Obrigatório contendo: \"cpfCnpj\" CPF ou CNPJ do encarregado de tratamento. Somente números, sem máscara e no máximo 14 caracteres. \"nome\" Nome do encarregado de tratamento, com no máximo 150 caracteres. \"email\" E-Mail do encarregado de tratamento, com no máximo 255 caracteres. \"telefone\" Telefone do Encarregado. Somente números, sem máscara com no máximo 11 caracteres."
+          },
+          "enderecoEletronico": {
+            "type": "string",
+            "example": "endereço eletrônico do site da empresa",
+            "description": "Campo Obrigatório e no máximo 255 caracteres. Deverá conter o endereço eletrônico do site da empresa."
+          },
+          "descricaoTratamento": {
+            "type": "string",
+            "example": "descrição do tratamento dos dados",
+            "description": "Campo Opcional e no máximo 4000 caracteres. Deverá conter a descrição dde como serão tratados os dados do consentimento."
+          },
+          "eventosTratamento": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "como os dados serão tratados",
+              "maxLength": 255
+            },
+            "description": "Campo Opcional, sendo um array de strings com texto livre e no máximos 255 caracteres por item. Deverá armazenar os eventos de tratamento dos dados."
+          },
+          "maneirasObtencaoInformacao": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "PRESENCIALMENTE, REQUISICAO_ELETRONICA, OUTRO",
+              "maxLength": 255
+            },
+            "description": "Campo Obrigatório. Contêm uma lista de maneiras de obtenção de informações. Esse campo indica como o titular dos dados pessoais poderá obter informações do controlador referente a este tratamento. Domínio possíveis são \"PRESENCIALMENTE\", \"REQUISICAO_ELETRONICA\" e \"OUTRO\". Caso seja informado OUTRO, o campo detalheOutraManeiraObtencaoInf deve ser preenchido. Deve ser informado ao menos uma maneira de obtenção de informações."
+          },
+          "detalheOutraManeiraObtencaoInf": {
+            "type": "string",
+            "example": "caso tenha OUTRO no campo acima, informar neste campo qual seria a maneira",
+            "description": "Campo Obrigatório caso a maneira de obtenção de informações seja OUTRO e no máximo com 4000 caracteres. Texto livre para detalhar a outra maneira de obtenção de informações."
+          }
+        }
+      },
+      "bodyConsentimento": {
+        "type": "object",
+        "properties": {
+          "idTemplate": {
+            "type": "string",
+            "example": "a3959898-193b-4894-8381-2d1700678855"
+          },
+          "urlRetorno": {
+            "type": "string",
+            "example": "http://exemplos.com.br"
+          },
+          "dataExpiracao": {
+            "type": "string",
+            "example": "2045-12-31T03:00:00.000Z"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
