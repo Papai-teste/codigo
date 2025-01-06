@@ -5,6 +5,7 @@ const fs = require('fs');
 const { createAxiosInstance } = require('./common/axiosFactory');
 const buildOptions = require('./common/optionsBuilder');
 const https = require('https');
+const msg = require('../db/listaErros');
 
 const configuredHttpsAgent = new https.Agent({
     pfx: fs.readFileSync(config.SECURITY_PATH_KEY + 'gaap_certificado.p12'),
@@ -24,10 +25,24 @@ const senatran = createAxiosInstance(
 module.exports = {
     veiculosBasicaProprietarioPlaca: (req, cpf, placa) => {
         const options = buildOptions({ req });
-        return senatran.get(`/v3/veiculos/basica/proprietario/${cpf}/placa/${placa}`, options);
+        let resultado = null;
+        try {
+            resultado = senatran.get(`/v3/veiculos/basica/proprietario/${cpf}/placa/${placa}`, options);
+        } catch (error) {
+            console.error("Erro na consulta de veículo no Senatran: " + error);
+            throw new Error(msg.GC64);
+        }
+        return resultado;
     },
     infracoesPorCPF: (req, cpf) => {
         const options = buildOptions({ req });
-        return senatran.get(`/v1/infracoes/cpf/${cpf}`, options);
+        let resultado = null;
+        try {
+            resultado = senatran.get(`/v1/infracoes/cpf/${cpf}`, options);
+        } catch (error) {
+            console.error("Erro na consulta de infrações no Senatran: " + error);
+            throw new Error(msg.GC64);
+        }
+        return resultado;
     }
 };
